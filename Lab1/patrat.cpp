@@ -9,6 +9,7 @@ Programul afiseaza un patrat pe care il translateaza pe axa x la apasarea sageti
 
 static GLfloat x = 0;
 static GLfloat y = 0;
+static GLfloat alfa = 0;
 
 void myInit() {
     glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -34,6 +35,15 @@ void CALLBACK MutaJos()
     y = y - 10;
 }
 
+void CALLBACK rot_z_up(AUX_EVENTREC* event) {
+    alfa += 20;
+}
+
+void CALLBACK rot_z_down(AUX_EVENTREC* event)
+{
+    alfa -= 20;
+}
+
 void CALLBACK display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -41,6 +51,8 @@ void CALLBACK display()
     glLoadIdentity();
 
     glTranslatef(x, y, 0.0);
+
+    glRotatef(alfa, 0, 0, 1);
 
     glBegin(GL_QUADS);
     {
@@ -53,6 +65,7 @@ void CALLBACK display()
         glColor3f(0.0, 1.0, 0.0);
         glVertex2f(100.0, 150.0);
     }
+
     glEnd();
 
     glFlush();
@@ -98,6 +111,8 @@ int main(int argc, char** argv)
     auxKeyFunc(AUX_RIGHT, MutaDreapta);
     auxKeyFunc(AUX_UP, MutaSus);
     auxKeyFunc(AUX_DOWN, MutaJos);
+    auxMouseFunc(AUX_LEFTBUTTON, AUX_MOUSEDOWN, rot_z_up);
+    auxMouseFunc(AUX_RIGHTBUTTON, AUX_MOUSEDOWN, rot_z_down);
 
     auxReshapeFunc(myReshape);
     auxMainLoop(display);
